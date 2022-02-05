@@ -1,6 +1,6 @@
 {
   "name": "redditnotifier",
-  "version": "0.1.0",
+  "version": "0.1.0a2",
   "description": "Help you stalk on a subreddit.",
   "main": "index.js",
   "scripts": {
@@ -12,10 +12,8 @@
     "@seald-io/nedb": "^2.2.1",
     "axios": "^0.25.0",
     "cli-progress": "^3.10.0",
-    "lokijs": "^1.5.12",
     "node-notifier": "^10.0.1",
-    "readline-sync": "^1.4.10",
-    "string-length": "^5.0.1"
+    "readline-sync": "^1.4.10"
   },
   "devDependencies": {
     "@types/lokijs": "^1.5.7",

@@ -13,20 +13,23 @@ if (process.env.NODE_ENV === "dev" || process.env.NODE_ENV === "development" || 
   debug_mode = true;
 }
 
-// Main script
-console.log("=".repeat(project.version.length + 16));
-console.log(`Reddit Notifier ${project.version}`);
-console.log("=".repeat(project.version.length + 16));
-console.log("You can press alt(PC)/control(Mac) + c at any time to exit the program. ");
 // Debug mode
 if (debug_mode) {
   const os = require("os");
+  console.log("[Debug]: If you're filing a bug report, start copying from this line.");
   console.log("[Debug]: Launching in debug mode...");
   console.log(`[Debug]: Node version:${process.version}`);
   console.log(`[Debug]: OS:${os.platform} v${os.release()}`);
   console.log(`[Debug]: CPU:${os.cpus()[0].model} Arch:${os.arch} Cores:${os.cpus().length}`);
   console.log(`[Debug]: RAM:${os.totalmem}`);
 }
+
+// Main script
+console.log("=".repeat(project.version.length + 16));
+console.log(`Reddit Notifier ${project.version}`);
+console.log("=".repeat(project.version.length + 16));
+console.log("You can press alt(PC)/control(Mac) + c at any time to exit the program. ");
+
 // Ask what sub to stalk on
 var sub: string = readline.question("Enter a sub name. Ex: r/ralsei \n> ");
 // Ask for update frequency
