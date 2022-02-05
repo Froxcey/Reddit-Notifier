@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "typeRoots": ["./node_modules/@types"],
+    "types": ["lokijs", "node", "node-notifier", "@seald-io/nedb"]
+  },
+  "compileOnSave": true,
+  "paths": {
+    "@seald-io/nedb": ["./node_modules/@types/nedb"]
+  },
+  "target": "es2021"
+}
