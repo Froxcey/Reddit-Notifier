@@ -1,8 +1,8 @@
 # Reddit Notifier
 
-Help you stalk on a subreddit.
+Helps you stalk on a subreddit.
 
-This project is still in the very early state.
+This project is still in the very early stage, and it's still a console application.
 
 Project started on Feb 2, 2021
 
@@ -99,9 +99,13 @@ I choose this license because I spend a lot of time on this project, and I want 
 Upcoming?
 
 - Notification with icon?
-- GUI?
+- GUI using ElectronJS?
 
-**v0.1.0** (Current)
+**v0.1.1** (Latest)
+
+- Internet errors no loger spams the console
+
+**v0.1.0**
 
 - Add notification feature
 - Debug mode now includes timestamps

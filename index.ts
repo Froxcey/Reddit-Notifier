@@ -8,6 +8,7 @@ import { RedditSubResponse } from "./types";
 var project = require("./package.json");
 
 var debug_mode = false;
+var canConnect = true;
 
 if (process.env.NODE_ENV === "dev" || process.env.NODE_ENV === "development" || process.env.NODE_ENV === "debug") {
   debug_mode = true;
@@ -27,9 +28,12 @@ if (debug_mode) {
 }
 
 // Main script
-console.log("=".repeat(project.version.length + 16));
-console.log(`Reddit Notifier ${project.version}`);
-console.log("=".repeat(project.version.length + 16));
+console.log("=".repeat(`Github.com/froxcey/reddit-notifier`.length));
+console.log(`Reddit Notifier ${project.version} from`);
+console.log(`Github.com/froxcey/reddit-notifier`);
+console.log(`Made by r/froxcey`);
+// More credits below
+console.log("=".repeat(`Github.com/froxcey/reddit-notifier`.length));
 console.log("You can press alt(PC)/control(Mac) + c at any time to exit the program.");
 
 // Ask what sub to stalk on
@@ -49,14 +53,19 @@ function check(): void {
     .get(`https://reddit.com/${sub}/new/.json`)
     .then((response) => {
       if (debug_mode) console.log(`[Debug] (Timestemp: ${new Date().getMilliseconds}): Got response`);
+      if (!canConnect) {
+        canConnect = true;
+        console.log("Got internet again :)");
+      }
       var res: RedditSubResponse = response.data;
       memoryCheck(res, 0);
     })
     .catch((error) => {
       if (debug_mode) {
         console.log(`[Debug] (Timestemp: ${new Date().getMilliseconds}): ${error}`);
-      } else {
-        console.log("Failed to fetch from Reddit. Run in debug mode to see what's wrong.");
+      } else if (canConnect) {
+        canConnect = false;
+        console.log("Failed to fetch from Reddit. Run in debug mode to see what went wrong.");
       }
     });
 }
