@@ -77,3 +77,15 @@ typings/
 
 # Stupid Mac trash files
 .DS_Store
+
+# Builds
+dist
+
+# vscode
+.vscode
+
+# Compiled javascript
+*.js
+
+# Compiling script
+genexec.sh

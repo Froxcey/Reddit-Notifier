@@ -1,8 +1,15 @@
 {
   "name": "redditnotifier",
-  "version": "0.1.0a2",
+  "version": "0.1.0",
   "description": "Help you stalk on a subreddit.",
   "main": "index.js",
+  "bin": "index.js",
+  "pkg": {
+    "outputPath": "dist",
+    "assets": [
+      "memory.db"
+    ]
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

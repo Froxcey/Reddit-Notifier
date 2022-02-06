@@ -7,27 +7,27 @@ if (process.env.NODE_ENV === "dev" || process.env.NODE_ENV === "development" || 
     debug_mode = true;
 }
 if (debug_mode)
-    console.log("[Debug]: Database manager started in debug mode");
+    console.log("[Debug] (Timestemp: ".concat(new Date().getMilliseconds, "): Database manager started in debug mode"));
 function check(id, sub, callback) {
     if (debug_mode)
         console.log("[Debug]: Indexing...");
     //console.log(db);
     db.find({ sub: sub, id: id }, function (err, docs) {
         if (debug_mode)
-            console.log("[Debug]: Indexing complete");
+            console.log("[Debug] (Timestemp: ".concat(new Date().getMilliseconds, "): Indexing complete"));
         if (err)
             return console.log(err);
         if (docs.length == 0) {
             callback(false);
             db.insert({ sub: sub, id: id }, function (err, doc) {
                 if (debug_mode)
-                    console.log("[Debug]: A new entry is stored");
+                    console.log("[Debug] (Timestemp: ${new Date().getMilliseconds}): A new entry is stored");
             });
         }
         else {
             callback(true);
             if (debug_mode)
-                console.log("[Debug]: Entry found, returning TRUE");
+                console.log("[Debug] (Timestemp: ${new Date().getMilliseconds}): Entry found, returning TRUE");
         }
     });
     return;

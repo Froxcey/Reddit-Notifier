@@ -1,25 +1,24 @@
 # Reddit Notifier
+
 Help you stalk on a subreddit.
+
+This project is still in the very early state.
 
 Project started on Feb 2, 2021
 
-## Installation
+## How to use
+
+**Method 1: Run script**
+
+First you need to install it
 
 1. Install [Node Runtime](https://nodejs.org)
 
-2. Download this project by either doing one of the following.
+2. Go to releases and download redditnotifier-compiled.zip
 
-   1. Click `Code` ⇒ `Download Zip` and unzip.
+3. Unzip
 
-   2. Run this command:
-
-      ```
-      git clone https://github.com/froxcey/reddit-notifier.git
-      ```
-
-      
-
-3. Open command line(win)/terminal(other) in this project directory. 
+3. Open command line(win)/terminal(other) in the redditnotifier directory.
 
 4. Run the following to install dependencies:
 
@@ -27,11 +26,7 @@ Project started on Feb 2, 2021
    npm install
    ```
 
-   
-
-## How to use
-
-Although the project is written in Typescript, my lovely assistant had already transpiled it into Javascript for me. You can node it automatically.
+Then you need to run it
 
 1. Open console(Win)/terminal(Unix) in this project directory.
 
@@ -41,19 +36,15 @@ Although the project is written in Typescript, my lovely assistant had already t
    node .
    ```
 
-   
+The first time you use it, it will bomb you with a bunch of results (10 probably). It should act normally the second time.
 
-3. Enter the sub name and hit enter. Ex: r/ralsei, r/memes, r/undertale, r/deltarune, and r/rickroll.
+**Method 2: Executable builds**
 
-4. Enter how often you want this tool to check for subreddit update. Unit is in minutes, and only enter a number. Recommended: 5.
-
-5. Wait until the tool tells you that there's an update in the console/terminal
-
-The first time you run the tool, it will tell you there's an update. This is not really the case all the time. Just start the program again and it should work fine.
+I'm having trouble with building the executable. It is coming soon.
 
 ## Help, I found a bug!!!
 
-Oh, bug? Is it a cockroach? No jk... If you want to send me a bug report, here's what to do.
+Oh, bug? Is it a cockroach? No jk... If you want to send me a bug report, here's what to do. Btw this is only possible with running with script.
 
 1. Open console(Win)/terminal(Unix) on this project directory
 
@@ -63,13 +54,13 @@ Oh, bug? Is it a cockroach? No jk... If you want to send me a bug report, here's
    NODE_ENV=debug node .
    ```
 
-   (Don't run this for normal use case. The output will look absolutely messy.)
+   (Don't run this for normal use case. The output will become absolutely messy.)
 
-3. Use the program normally until soemthing weird happens
+3. Use the program normally until the abnormal
 
 4. Copy everything past `[Debug]: If you're filing a bug report, start copying from this line.`
 
-5. Click on the issue tab on this Github repository
+5. Click on the issue tab of this Github repository
 
 6. Create a new issue
 
@@ -89,7 +80,7 @@ Oh you wanna help? You can check the project out, and fix/add anything with a pu
 
 Made by Froxcey
 
-Thanks to several dependencies: nedb, axios, readline-sync, and Typescript.
+Thanks to several FOSS dependencies: nedb, axios, readline-sync, and Typescript.
 
 ## License
 
@@ -105,9 +96,20 @@ I choose this license because I spend a lot of time on this project, and I want 
 
 ## Change log
 
-**c0.1.0a2**
+Upcoming?
 
-This is a beta release
+- Notification with icon?
+- GUI?
+
+**v0.1.0** (Current)
+
+- Add notification feature
+- Debug mode now includes timestamps
+- Support update detection for more than one post
+
+**v0.1.0a2**
+
+This is an alpha release
 
 - Include a better README
 - Remove DS_Store
@@ -117,7 +119,8 @@ This is a beta release
 
 **v0.1.0a1**
 
-This is a beta release
+This is an alpha release
 
 - Initial release
 
+Made with ~~❤️~~ ⌨️ by Froxcey

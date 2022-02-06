@@ -8,8 +8,8 @@ interface RedditSubResponse {
       {
         kind: string;
         data: {
-          approved_at_utc: any;
-          /** name of the subreddit */
+          approved_at_utc: number | null;
+          /** Name of the subreddit */
           subreddit: string;
           selftext: string;
           author_fullname: string;
@@ -23,6 +23,7 @@ interface RedditSubResponse {
           hidden: string;
           pwls: number;
           link_flair_css_class: string;
+          /** Number of downvotes */
           downs: number;
           thumbnail_height: number | null;
           top_awarded_type: any | null;
@@ -32,7 +33,9 @@ interface RedditSubResponse {
           link_flair_text_color: string;
           upvote_ratio: number;
           author_flair_background_color: any | null;
+          /** Number of upvotes */
           ups: number;
+          /** Number of awards this post received */
           total_awards_received: number;
           media_embed: object;
           thumbnail_width: number;
