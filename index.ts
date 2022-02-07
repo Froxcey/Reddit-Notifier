@@ -34,7 +34,7 @@ console.log(`Github.com/froxcey/reddit-notifier`);
 console.log(`Made by r/froxcey`);
 // More credits below
 console.log("=".repeat(`Github.com/froxcey/reddit-notifier`.length));
-console.log("You can press alt(PC)/control(Mac) + c at any time to exit the program.");
+console.log("Press [,] to see a list of shortcuts.");
 
 // Ask what sub to stalk on
 var sub: string = readline.question("Enter a sub name. Ex: r/ralsei \n> ");
@@ -76,6 +76,33 @@ check();
 setInterval(() => {
   check();
 }, interval);
+
+// Shortcut
+var stdin = process.stdin;
+stdin.setRawMode(true);
+stdin.resume();
+stdin.setEncoding("utf8");
+stdin.on("data", function (key) {
+  switch (key.toString()) {
+    case "r":
+      if (debug_mode) console.log(`[Debug] (Timestemp: ${new Date().getMilliseconds}): refresh key detected`);
+      check();
+      break;
+    case ",":
+      console.log(`Shortcuts:`);
+      console.log(`[x]: Exit the program`);
+      console.log(`[r]: Check for new post immediately`);
+      check();
+      break;
+    case "x":
+      if (debug_mode)
+        console.log(`[Debug] (Timestemp: ${new Date().getMilliseconds}): Exit key detected, shutting down`);
+      process.exit(0);
+      break;
+    default:
+      break;
+  }
+});
 
 function memoryCheck(res: RedditSubResponse, index: number) {
   if (!res.data.children[index]) {

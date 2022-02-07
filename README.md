@@ -101,7 +101,11 @@ Upcoming?
 - Notification with icon?
 - GUI using ElectronJS?
 
-**v0.1.1** (Latest)
+**v0.2.0** (Latest)
+
+- Adds shortcus. x: exit. r: refresh.
+
+**v0.1.1**
 
 - Internet errors no loger spams the console
 
