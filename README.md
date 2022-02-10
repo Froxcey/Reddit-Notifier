@@ -1,6 +1,6 @@
 # Reddit Notifier
 
-Helps you stalk on a subreddit.
+Help you stalk on a subreddit.
 
 This project is still in the very early stage, and it's still a console application.
 
@@ -18,9 +18,9 @@ First you need to install it
 
 3. Unzip
 
-3. Open command line(win)/terminal(other) in the redditnotifier directory.
+4. Open command line(win)/terminal(other) in the redditnotifier directory.
 
-4. Run the following to install dependencies:
+5. Run the following to install dependencies:
 
    ```shell
    npm install
@@ -101,13 +101,26 @@ Upcoming?
 - Notification with icon?
 - GUI using ElectronJS?
 
-**v0.2.0** (Latest)
+**v0.3.0** (Latest)
 
-- Adds shortcus. x: exit. r: refresh.
+- Improve aesthetic by adding a box
+- Clear console when the process starts
+- Shortcut c for clearing outputs (clean the console)
+- Clean up packages that are not used
+- Remove credit (cuz there's already a link)
+- Shortcut s to show session statistics
+- Automatically looks for new post when wake from sleep
+- Short p to toggle auto check (r shortcut still works)
+- Fix debug mode timestamps
+- Arrow keys shortcuts for changing check interval quickly
+
+**v0.2.0**
+
+- Add shortcuts. x: exit. r: refresh.
 
 **v0.1.1**
 
-- Internet errors no loger spams the console
+- Internet errors no longer spams the console
 
 **v0.1.0**
 

@@ -2,13 +2,25 @@
 import axios = require("axios");
 import readline = require("readline-sync");
 import notifier = require("node-notifier");
-import child_process = require("child_process");
 import subMemory = require("./subMemory");
+import boxen = require("boxen");
+import wakeEvent = require("wake-event");
 import { RedditSubResponse } from "./types";
 var project = require("./package.json");
 
+console.clear();
+
 var debug_mode = false;
 var canConnect = true;
+var lines = 0;
+var stats = {
+  requests: {
+    successes: 0,
+    fails: 0,
+  },
+  posts: 0,
+};
+var paused = false;
 
 if (process.env.NODE_ENV === "dev" || process.env.NODE_ENV === "development" || process.env.NODE_ENV === "debug") {
   debug_mode = true;
@@ -17,9 +29,7 @@ if (process.env.NODE_ENV === "dev" || process.env.NODE_ENV === "development" || 
 // Debug mode
 if (debug_mode) {
   const os = require("os");
-  console.log(
-    `[Debug]: If you're filing a bug report, start copying from this line. (Timestemp: ${new Date().getMilliseconds})`
-  );
+  console.log(`[Debug]: If you're filing a bug report, start copying from this line. (Timestemp: ${Date.now()})`);
   console.log("[Debug]: Launching in debug mode...");
   console.log(`[Debug]: Node version:${process.version}`);
   console.log(`[Debug]: OS:${os.platform} v${os.release()}`);
@@ -27,53 +37,58 @@ if (debug_mode) {
   console.log(`[Debug]: RAM:${os.totalmem}`);
 }
 
-// Main script
-console.log("=".repeat(`Github.com/froxcey/reddit-notifier`.length));
-console.log(`Reddit Notifier ${project.version} from`);
-console.log(`Github.com/froxcey/reddit-notifier`);
-console.log(`Made by r/froxcey`);
-// More credits below
-console.log("=".repeat(`Github.com/froxcey/reddit-notifier`.length));
-console.log("Press [,] to see a list of shortcuts.");
+console.log(
+  boxen(`Version ${project.version}\ngithub.com/froxcey/reddit-notifier\nPress [,] to see a list of shortcuts`, {
+    title: "Reddit Notifier",
+    titleAlignment: "center",
+    padding: 1,
+    borderColor: "cyan",
+  })
+);
 
 // Ask what sub to stalk on
 var sub: string = readline.question("Enter a sub name. Ex: r/ralsei \n> ");
 // Ask for update frequency
 var interval: number =
   parseInt(readline.question("How often do you want me to check on this sub (in minutes) \n> ")) * 60000;
+if (interval < 120000) {
+  console.log("Anything below 2 minute is not good for Reddit's potato server, automatically setting it to 2 minute");
+  interval = 120000;
+}
 console.log("Okay, I'll keep an eye on this sub...");
 // Check action
 function check(): void {
   // Send a request
   if (debug_mode)
-    console.log(
-      `[Debug] (Timestemp: ${new Date().getMilliseconds}): Sending request to https://reddit.com/${sub}/new/.json`
-    );
+    console.log(`[Debug] (Timestemp: ${Date.now()}): Sending request to https://reddit.com/${sub}/new/.json`);
   axios.default
     .get(`https://reddit.com/${sub}/new/.json`)
     .then((response) => {
-      if (debug_mode) console.log(`[Debug] (Timestemp: ${new Date().getMilliseconds}): Got response`);
+      stats.requests.successes++;
+      if (debug_mode) console.log(`[Debug] (Timestemp: ${Date.now()}): Got response`);
       if (!canConnect) {
         canConnect = true;
         console.log("Got internet again :)");
+        lines++;
       }
       var res: RedditSubResponse = response.data;
       memoryCheck(res, 0);
     })
     .catch((error) => {
+      stats.requests.fails++;
       if (debug_mode) {
-        console.log(`[Debug] (Timestemp: ${new Date().getMilliseconds}): ${error}`);
+        console.log(`[Debug] (Timestemp: ${Date.now()}): ${error}`);
       } else if (canConnect) {
         canConnect = false;
         console.log("Failed to fetch from Reddit. Run in debug mode to see what went wrong.");
+        lines++;
       }
     });
 }
 // Start the check timer
-if (debug_mode)
-  console.log(`[Debug] (Timestemp: ${new Date().getMilliseconds}): Starting a interval timer of ${interval}`);
+if (debug_mode) console.log(`[Debug] (Timestemp: ${Date.now()}): Starting a interval timer of ${interval}`);
 check();
-setInterval(() => {
+var checkTimer = setInterval(() => {
   check();
 }, interval);
 
@@ -85,34 +100,109 @@ stdin.setEncoding("utf8");
 stdin.on("data", function (key) {
   switch (key.toString()) {
     case "r":
-      if (debug_mode) console.log(`[Debug] (Timestemp: ${new Date().getMilliseconds}): refresh key detected`);
+      if (debug_mode) console.log(`[Debug] (Timestemp: ${Date.now()}): refresh key detected`);
       check();
       break;
     case ",":
-      console.log(`Shortcuts:`);
-      console.log(`[x]: Exit the program`);
-      console.log(`[r]: Check for new post immediately`);
-      check();
+      console.log(
+        boxen(
+          `\x1b[37m[,]: Show shortcuts\n\x1b[37m[x]: Exit the program\n\x1b[37m[r]: Refresh immediately\n\x1b[37m[c]: Reset outputs\n\x1b[37m[s]: show statistics\n\x1b[37m[p]: toggle autocheck\n\x1b[37m[up/down arrow]: change check interval`,
+          {
+            title: "Shortcuts",
+            titleAlignment: "center",
+            borderColor: "blackBright",
+          }
+        )
+      );
+      lines += 9;
+      break;
+    case "c":
+      if (debug_mode) {
+        console.log(`[Debug] (Timestemp: ${Date.now()}): Clearing is not available in debug mode`);
+        break;
+      }
+      process.stdout.moveCursor(0, -lines);
+      process.stdout.clearScreenDown();
+      lines = 0;
       break;
     case "x":
-      if (debug_mode)
-        console.log(`[Debug] (Timestemp: ${new Date().getMilliseconds}): Exit key detected, shutting down`);
+      if (debug_mode) console.log(`[Debug] (Timestemp: ${Date.now()}): Exit key detected, shutting down`);
       process.exit(0);
+    case "s":
+      console.log(
+        boxen(
+          `Successiful requests: ${stats.requests.successes}\nFailed requests: ${stats.requests.fails}\nPosts found: ${stats.posts}`,
+          {
+            title: "Session Stats",
+            titleAlignment: "center",
+          }
+        )
+      );
+      lines += 5;
+      break;
+    case "\u001B\u005B\u0041":
+      //up
+      interval += 60000;
+      if (!paused) {
+        clearInterval(checkTimer);
+        checkTimer = setInterval(() => {
+          check();
+        }, interval);
+      }
+      console.log(`The check interval is increased to ${interval / 60000} minute`);
+      lines++;
+      break;
+    case "\u001B\u005B\u0042":
+      if (interval < 180000) {
+        console.log("Can't go any faster than 2 minutes, Reddit's potato server will explode.");
+        lines++;
+        break;
+      }
+      //down
+      interval -= 60000;
+      if (!paused) {
+        clearInterval(checkTimer);
+        checkTimer = setInterval(() => {
+          check();
+        }, interval);
+      }
+      console.log(`The check interval is decreased to ${interval / 60000} minute`);
+      lines++;
+      break;
+    case "p":
+      paused = !paused;
+      if (paused) {
+        clearInterval(checkTimer);
+        console.log("Autocheck paused");
+        lines++;
+      } else {
+        checkTimer = setInterval(() => {
+          check();
+        }, interval);
+        check();
+        console.log("Autocheck is back");
+        lines++;
+      }
+      //toggle pause
       break;
     default:
       break;
   }
 });
 
+wakeEvent(check);
+
 function memoryCheck(res: RedditSubResponse, index: number) {
   if (!res.data.children[index]) {
-    if (debug_mode) console.log(`[Debug] (Timestemp: ${new Date().getMilliseconds}): Array indexing exceeded`);
+    if (debug_mode) console.log(`[Debug] (Timestemp: ${Date.now()}): Array indexing exceeded`);
     return;
   }
-  if (debug_mode) console.log(`[Debug] (Timestemp: ${new Date().getMilliseconds}): Indexing array ${index}`);
+  if (debug_mode) console.log(`[Debug] (Timestemp: ${Date.now()}): Indexing array ${index}`);
   subMemory(res.data.children[index].data.id, sub, (found) => {
     if (!found) {
       console.log(`I found a new post! Link: https://reddit.com${res.data.children[index].data.permalink}`);
+      lines++;
+      stats.posts++;
       notifier.notify({
         title: `New ${sub} post`,
         message: res.data.children[index].data.title,

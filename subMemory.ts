@@ -6,23 +6,22 @@ if (process.env.NODE_ENV === "dev" || process.env.NODE_ENV === "development" || 
   debug_mode = true;
 }
 
-if (debug_mode)
-  console.log(`[Debug] (Timestemp: ${new Date().getMilliseconds}): Database manager started in debug mode`);
+if (debug_mode) console.log(`[Debug] (Timestemp: ${Date.now()}): Database manager started in debug mode`);
 
 function check(id: string, sub: string, callback: (found: boolean) => void): void {
-  if (debug_mode) console.log(`[Debug]: Indexing...`);
+  if (debug_mode) console.log(`[Debug] (Timestemp: ${Date.now()}): Database module is indexing...`);
   //console.log(db);
   db.find({ sub: sub, id: id }, (err: Error, docs: Array<{ sub: string; id: string }>) => {
-    if (debug_mode) console.log(`[Debug] (Timestemp: ${new Date().getMilliseconds}): Indexing complete`);
+    if (debug_mode) console.log(`[Debug] (Timestemp: ${Date.now()}): Indexing complete`);
     if (err) return console.log(err);
     if (docs.length == 0) {
       callback(false);
       db.insert({ sub: sub, id: id }, (err, doc) => {
-        if (debug_mode) console.log("[Debug] (Timestemp: ${new Date().getMilliseconds}): A new entry is stored");
+        if (debug_mode) console.log(`[Debug] (Timestemp: ${Date.now()}): A new entry is stored`);
       });
     } else {
       callback(true);
-      if (debug_mode) console.log("[Debug] (Timestemp: ${new Date().getMilliseconds}): Entry found, returning TRUE");
+      if (debug_mode) console.log(`[Debug] (Timestemp: ${Date.now()}): Entry found, returning TRUE`);
     }
   });
   return;
