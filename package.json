@@ -1,6 +1,6 @@
 {
   "name": "redditnotifier",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Help you stalk on a subreddit.",
   "main": "index.js",
   "bin": "index.js",
@@ -20,8 +20,7 @@
     "axios": "^0.25.0",
     "boxen": "^5.1.2",
     "node-notifier": "^10.0.1",
-    "readline-sync": "^1.4.10",
-    "wake-event": "^0.0.1"
+    "readline-sync": "^1.4.10"
   },
   "devDependencies": {
     "@types/node": "^17.0.14",

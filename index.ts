@@ -4,7 +4,6 @@ import readline = require("readline-sync");
 import notifier = require("node-notifier");
 import subMemory = require("./subMemory");
 import boxen = require("boxen");
-import wakeEvent = require("wake-event");
 import { RedditSubResponse } from "./types";
 var project = require("./package.json");
 
@@ -47,7 +46,7 @@ console.log(
 );
 
 // Ask what sub to stalk on
-var sub: string = readline.question("Enter a sub name. Ex: r/ralsei \n> ");
+var subs: Array<string> = readline.question("Enter subs. Ex: r/ralsei \n> ").split(",");
 // Ask for update frequency
 var interval: number =
   parseInt(readline.question("How often do you want me to check on this sub (in minutes) \n> ")) * 60000;
@@ -58,32 +57,35 @@ if (interval < 120000) {
 console.log("Okay, I'll keep an eye on this sub...");
 // Check action
 function check(): void {
-  // Send a request
-  if (debug_mode)
-    console.log(`[Debug] (Timestemp: ${Date.now()}): Sending request to https://reddit.com/${sub}/new/.json`);
-  axios.default
-    .get(`https://reddit.com/${sub}/new/.json`)
-    .then((response) => {
-      stats.requests.successes++;
-      if (debug_mode) console.log(`[Debug] (Timestemp: ${Date.now()}): Got response`);
-      if (!canConnect) {
-        canConnect = true;
-        console.log("Got internet again :)");
-        lines++;
-      }
-      var res: RedditSubResponse = response.data;
-      memoryCheck(res, 0);
-    })
-    .catch((error) => {
-      stats.requests.fails++;
-      if (debug_mode) {
-        console.log(`[Debug] (Timestemp: ${Date.now()}): ${error}`);
-      } else if (canConnect) {
-        canConnect = false;
-        console.log("Failed to fetch from Reddit. Run in debug mode to see what went wrong.");
-        lines++;
-      }
-    });
+  subs.forEach((element) => {
+    var sub = element.trim();
+    // Send a request
+    if (debug_mode)
+      console.log(`[Debug] (Timestemp: ${Date.now()}): Sending request to https://reddit.com/${sub}/new/.json`);
+    axios.default
+      .get(`https://reddit.com/${sub}/new/.json`)
+      .then((response) => {
+        stats.requests.successes++;
+        if (debug_mode) console.log(`[Debug] (Timestemp: ${Date.now()}): Got response`);
+        if (!canConnect) {
+          canConnect = true;
+          console.log("Got internet again :)");
+          lines++;
+        }
+        var res: RedditSubResponse = response.data;
+        memoryCheck(res, 0, sub);
+      })
+      .catch((error) => {
+        stats.requests.fails++;
+        if (debug_mode) {
+          console.log(`[Debug] (Timestemp: ${Date.now()}): ${error}`);
+        } else if (canConnect) {
+          canConnect = false;
+          console.log("Failed to fetch from Reddit. Run in debug mode to see what went wrong.");
+          lines++;
+        }
+      });
+  });
 }
 // Start the check timer
 if (debug_mode) console.log(`[Debug] (Timestemp: ${Date.now()}): Starting a interval timer of ${interval}`);
@@ -190,9 +192,7 @@ stdin.on("data", function (key) {
   }
 });
 
-wakeEvent(check);
-
-function memoryCheck(res: RedditSubResponse, index: number) {
+function memoryCheck(res: RedditSubResponse, index: number, sub: string) {
   if (!res.data.children[index]) {
     if (debug_mode) console.log(`[Debug] (Timestemp: ${Date.now()}): Array indexing exceeded`);
     return;
@@ -211,7 +211,7 @@ function memoryCheck(res: RedditSubResponse, index: number) {
         icon: ``,
         open: `https://reddit.com${res.data.children[index].data.permalink}`,
       });
-      memoryCheck(res, index + 1);
+      memoryCheck(res, index + 1, sub);
     }
   });
 }
