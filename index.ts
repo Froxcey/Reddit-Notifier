@@ -37,6 +37,19 @@ if (debug_mode) {
 }
 
 console.log(
+  boxen(
+    `In response to Reddit killing third party apps,\nthis project will no longer receive any \nupdate. For more information please visit\nwww.reddit.com/r/ModCoord/comments/1476fkn\n - Frox, Maintainer`,
+    {
+      title: "Deprecation Notice",
+      titleAlignment: "center",
+      padding: 1,
+      borderColor: "red",
+      backgroundColor: "yellow",
+    }
+  )
+);
+
+console.log(
   boxen(`Version ${project.version}\ngithub.com/froxcey/reddit-notifier\nPress [,] to see a list of shortcuts`, {
     title: "Reddit Notifier",
     titleAlignment: "center",

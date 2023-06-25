@@ -1,3 +1,9 @@
+# :warning: Deprecation Notice
+
+In response to Reddit killing third party apps, this project will no longer receive any update. For more information please visit <https://www.reddit.com/r/ModCoord/comments/1476fkn>
+
+\- Frox, Maintainer
+
 # Reddit Notifier
 
 A NodeJS console application that helps you stalk on a subreddit.

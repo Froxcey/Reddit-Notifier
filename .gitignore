@@ -84,7 +84,7 @@ dist
 # vscode
 .vscode
 
-# Compiled javascript
+# Project junks
 *.js
 
 # Compiling script
